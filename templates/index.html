@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SmartLibrary</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <!-- FIX 1: Logo Univesp SEPARADA -->
+      <a href="https://univesp.br/" target="_blank" class="logo_univesp">
+        <img src="{% static 'img/logo_univesp.png' %}" alt="Univesp" width="110" height="40">
+      </a>
+      
+      <!-- FIX 2: Smart Library SEPARADA -->
+      <a href="/" class="logo_smart">
+        <img src="{% static 'img/logo_smartlibrary.png' %}" alt="Smart Library" width="120" height="50">
+      </a>
+      
+      <nav>
+        <ul>
+          <li><a href="#home">🏠 Início</a></li>
+          <li><a href="#catalogo">📚 Catálogo</a></li>
+          <li><a href="/admin" target="_blank">🔐 Acesso Colaborador</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main style="margin-top: 70px;">
+    <section class="hero" id="home">
+      <div class="container">
+        <h1>Bem-vindo à Biblioteca Digital</h1>
+        <a class="btn" href="#catalogo">Ver catálogo</a>
+      </div>
+    </section>
+
+    <!-- CATÁLOGO SEPARADO -->
+<section class="cards" id="catalogo">
+  <div class="container">
+    
+    <!-- LIVROS DISPONÍVEIS -->
+    <h2 style="text-align:center; margin: 2rem 0 1rem;">📚 Livros Disponíveis ({{ livros_disponiveis.count }})</h2>
+    <div class="container grid">
+      {% for livro in livros_disponiveis %}
+      <article class="card" style="border-left: 5px solid green;">
+        {% if livro.imagem %}
+          <img src="{{ livro.imagem.url }}" alt="{{ livro.titulo }}" style="width:100%;height:200px;object-fit:cover;">
+        {% endif %}
+        <h3>{{ livro.titulo }}<br><small>{{ livro.autor }}</small></h3>
+        <p><em>✅ Disponível para empréstimo</em></p>
+        <a href="#" class="btn">Emprestar</a>
+      </article>
+      {% empty %}
+      <article class="card">
+        <h3>Nenhum livro disponível</h3>
+        <p>Cadastre livros em <a href="/admin/">Admin</a></p>
+      </article>
+      {% endfor %}
+    </div>
+
+    <!-- LIVROS EMPRESTADOS -->
+    <h2 style="text-align:center; margin: 3rem 0 1rem;">🔴 Livros Emprestados ({{ livros_emprestados.count }})</h2>
+    <div class="container grid">
+      {% for livro in livros_emprestados %}
+      <article class="card" style="border-left: 5px solid red;">
+        {% if livro.imagem %}
+          <img src="{{ livro.imagem.url }}" alt="{{ livro.titulo }}" style="width:100%;height:200px;object-fit:cover;">
+        {% endif %}
+        <h3>{{ livro.titulo }}<br><small>{{ livro.autor }}</small></h3>
+        <p><strong>Aluno:</strong> {{ livro.aluno }}</p>
+        <p><strong>Devolver até:</strong> {{ livro.data_devolucao|date:"d/m/Y" }}</p>
+        <p style="color: {% if livro.dias_restantes < 5 %}red{% else %}orange{% endif %}; font-weight:bold;">
+          ⏰ {{ livro.dias_restantes }} dias restantes
+        </p>
+        <a href="#" class="btn">Marcar Devolvido</a>
+      </article>
+      {% empty %}
+      <article class="card">
+        <h3>Nenhum livro emprestado</h3>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+  </main>
+
+  <footer class="site-footer" id="contato">
+    <div class="container">
+      <p>© SmartLibrary — Biblioteca Virtual</p>
+    </div>
+  </footer>
+</body>
+</html>

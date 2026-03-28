@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero">
+  <div class="container">
+    <h1>🔐 Login Admin</h1>
+    {% if messages %}
+      {% for message in messages %}
+        <p style="color: red;">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="text" name="username" placeholder="Usuário (victo)" required>
+      <input type="password" name="password" placeholder="Senha" required>
+      <button type="submit" class="btn">Entrar no Admin</button>
+    </form>
+    <p><a href="/admin/">Ou clique aqui (direto)</a></p>
+  </div>
+</div>
+{% endblock %}
