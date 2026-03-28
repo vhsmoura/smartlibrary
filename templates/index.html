@@ -49,6 +49,7 @@
       <article class="card" style="border-left: 5px solid green;">
         {% if livro.imagem %}
           <img src="{{ livro.imagem.url }}" alt="{{ livro.titulo }}" style="width:100%;height:200px;object-fit:cover;">
+          <p style="font-size:12px; color:#666; word-break:break-all; margin:6px 0 0;">URL: {{ livro.imagem.url }}</p>
         {% endif %}
         <h3>{{ livro.titulo }}<br><small>{{ livro.autor }}</small></h3>
         <p><em>✅ Disponível para empréstimo</em></p>
@@ -69,6 +70,7 @@
       <article class="card" style="border-left: 5px solid red;">
         {% if livro.imagem %}
           <img src="{{ livro.imagem.url }}" alt="{{ livro.titulo }}" style="width:100%;height:200px;object-fit:cover;">
+          <p style="font-size:12px; color:#666; word-break:break-all; margin:6px 0 0;">URL: {{ livro.imagem.url }}</p>
         {% endif %}
         <h3>{{ livro.titulo }}<br><small>{{ livro.autor }}</small></h3>
         <p><strong>Aluno:</strong> {{ livro.aluno }}</p>
@@ -76,7 +78,14 @@
         <p style="color: {% if livro.dias_restantes < 5 %}red{% else %}orange{% endif %}; font-weight:bold;">
           ⏰ {{ livro.dias_restantes }} dias restantes
         </p>
-        <a href="#" class="btn">Marcar Devolvido</a>
+        {% if user.is_authenticated %}
+        <form action="{% url 'marcar_devolvido' livro.id %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button class="btn" type="submit">Marcar Devolvido</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn">Marcar Devolvido</a>
+        {% endif %}
       </article>
       {% empty %}
       <article class="card">
